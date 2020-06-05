@@ -1,0 +1,28 @@
+{
+  "heartbeat": true,
+  "PORT": "3000",
+  "JWT_SECRET_KEY": "sUPerSeCuREKeY&^$^&$^%$^%7782348723t4872t34Ends",
+  "s3":{
+    "bucket": "exactechakash",
+    "accessKeyId": "AKIARAIYYAELBEFYO2UU",
+    "secretAccessKey": "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",
+    "s3URL": "https://s3.ap-south-1.amazonaws.com/exactechakash/"
+  },
+  "databaseSettings"   : {
+    "host"    : "localhost",
+    "user"    : "root",
+    "password":  "R/gSzP7SHH++5zc1b5U=",
+    "database": "exactechDev",
+    "mysqlPORT": "3306",
+    "mongo_db_connection":"",
+    "redis":{
+      "port":"6379",
+      "host":"localhost"
+    }
+  },
+  "twilio" : {
+    "accountSid":"ACe3170470acdc98daf0389c55c4147ef5",
+    "authToken":"d454fdb202d194575839c6f1cb681574",
+    "from":"441277424615"
+  }
+}
