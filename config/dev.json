@@ -11,8 +11,8 @@
   "databaseSettings"   : {
     "host"    : "localhost",
     "user"    : "root",
-    "password":  "R/gSzP7SHH++5zc1b5U=",
-    "database": "exactechDev",
+    "password":  "CircleApp@123",
+    "database": "circleDev",
     "mysqlPORT": "3306",
     "mongo_db_connection":"",
     "redis":{

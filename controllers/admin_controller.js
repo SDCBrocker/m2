@@ -2,7 +2,6 @@ const universal_functions = require('../utils/universal_functions');
 const admin_services = require('../services/admin_services')
 const constant = require('../lib/constant')
 const customer_services = require('../services/customer_services')
-const case_services = require('../services/case_services')
 const config = require('config');
 const accountSid = config.twilio.accountSid;
 const authToken = config.twilio.authToken;

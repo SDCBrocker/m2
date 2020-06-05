@@ -2,7 +2,6 @@ var cron = require('node-cron');
 var moment = require('moment');
 const universal_functions = require('../utils/universal_functions');
 const cron_job_services = require('../services/cron_job_services')
-const case_services = require('../services/case_services')
 const customer_services = require('../services/customer_services')
 const underscore = require('underscore')
 

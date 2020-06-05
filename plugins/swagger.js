@@ -16,7 +16,7 @@ exports.plugin = {
     register: async function (server, options) {
         const swaggerOptions = {
             info: {
-                title: 'Exactech API Documentation ' + title,
+                title: 'CircleApp API Documentation ' + title,
                 version: Pack.version,
             },
         };

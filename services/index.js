@@ -3,7 +3,6 @@
  */
 'use strict';
 const customer_services = require('./customer_services');
-const case_services = require('./case_services');
 const admin_services = require('./admin_services');
 
 
@@ -11,5 +10,4 @@ const admin_services = require('./admin_services');
 module.exports = {
     customer_services:customer_services,
     admin_services:admin_services,
-    case_services:case_services,
 }

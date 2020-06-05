@@ -4,9 +4,8 @@
 'use strict';
 const customer_route = require('./customer_route');
 const admin_route = require('./admin_route');
-const case_route = require('./case_route');
 require('../controllers/cron_job');
-const all = [].concat(customer_route, admin_route, case_route);
+const all = [].concat(customer_route, admin_route);
 
 module.exports = all;
 
