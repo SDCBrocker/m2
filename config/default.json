@@ -12,7 +12,7 @@
     "host"    : "localhost",
     "user"    : "root",
     "password":  "",
-    "database": "exactech",
+    "database": "circle",
     "mysqlPORT": "3306",
     "mongo_db_connection":"",
     "redis":{

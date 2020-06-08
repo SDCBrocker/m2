@@ -24,16 +24,14 @@ const sign_up = async (payload) => {
             throw constant.msg.emailExist
         } else {
             let create_data = await customer_services.create_user(payload);
-            await case_services.save_case_name({ user_id: create_data.insertId }, { name: "Case Discussion" })
-            await case_services.save_case_name({ user_id: create_data.insertId }, { name: "News" })
             customer_services.email_send(
                 {
-                    username: payload.username, email: payload.email,
+                    name: payload.name, email: payload.email,
                     msg: constant.email_msg.register,
                     subject: constant.email_msg.register_subject,
                     email_template: constant.email_template.register,
                     body: constant.email_template.register
-                }, { username: payload.name })
+                }, { name: payload.name })
             user_id = create_data.insertId
         }
 
@@ -106,11 +104,11 @@ const login = async (payload) => {
         if (getUser.is_block == 1) {
             throw constant.msg.accountBlock
         } else {
-            if (getUser.is_approve == 0) {
-                throw constant.msg.accountNotApprove
-            } else if (getUser.is_approve == 2) {
-                throw constant.msg.accountReject
-            } else {
+            // if (getUser.is_approve == 0) {
+            //     throw constant.msg.accountNotApprove
+            // } else if (getUser.is_approve == 2) {
+            //     throw constant.msg.accountReject
+            // } else {
                 getUser.type = "customer"
                 let token = await customer_services.create_token_customer(getUser);
                 getUser.access_token = token
@@ -119,7 +117,7 @@ const login = async (payload) => {
                 await customer_services.update_token(getUser, payload);
 
                 return universal_functions.sendSuccess(payload, getUser);
-            }
+           // }
         }
 
 
@@ -145,12 +143,11 @@ const check_email = async (payload) => {
     }
 }
 
-const check_username = async (payload) => {
+const check_phone_number = async (payload) => {
     try {
-        let getUser = null, user_id = null
-        let check_user = await customer_services.check_username(payload.username);
+        let check_user = await customer_services.check_phone_number(payload.phone_number);
         if (check_user && check_user.length > 0) {
-            throw constant.msg.usernameExist
+            throw constant.msg.phoneExist
         } else {
             return universal_functions.sendSuccess(payload, []);
         }
@@ -747,7 +744,7 @@ module.exports = {
     sign_up: sign_up,
     login: login,
     check_email: check_email,
-    check_username: check_username,
+    check_phone_number: check_phone_number,
     get_details: get_details,
     otp_verify: otp_verify,
     upload_image: upload_image,

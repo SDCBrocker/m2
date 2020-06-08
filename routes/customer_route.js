@@ -22,20 +22,17 @@ module.exports = [
             validate: {
                 payload: {
                     name: joi.string().required(),
-                    username: joi.string(),
+                    country_code:joi.string().required(),
+                    phone_number:joi.string().required(),
                     image: joi.string().trim(),
                     email: joi.string().required().trim(),
-                    npi: joi.string(),
-                    password: joi.string(),
+                    password: joi.string().required(),
                     device_type: joi.string().required().valid([constant.device_type.android, constant.device_type.ios]),
                     device_token: joi.string().required(),
                     app_version: joi.string().required().trim(),
-                    call_me: joi.string(),
-                    email_me: joi.string(),
-                    sale_call: joi.string(),
-                    sale_email: joi.string(),
-
-
+                    birth_date: joi.string().required(),
+                    gender: joi.string().required(),
+                    zipcode: joi.number().integer().required(),
                 },
                 failAction: universal_functions.failActionFunction
             },
@@ -105,18 +102,18 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/user/check_username',
+        path: '/user/check_phone',
         handler: async (request, reply) => {
             let payloadData = request.payload;
-            let data = await controller.customer_controller.check_username(payloadData)
+            let data = await controller.customer_controller.check_phone_number(payloadData)
             return data
         },
         config: {
-            description: 'check username user',
-            tags: ['api', 'surgen'],
+            description: 'check phone number',
+            tags: ['api', 'user'],
             validate: {
                 payload: {
-                    username: joi.string().required().trim()
+                    phone_number: joi.string().required().trim()
                 },
                 failAction: universal_functions.failActionFunction
             },

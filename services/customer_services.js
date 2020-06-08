@@ -28,11 +28,12 @@ const options = {
 }
 
 const create_user = async (payload) => {
+    console.log(payload)
     try {
 
-        let sql = 'INSERT INTO `tb_users`(`email`,`password`, `name`, `otp`,`device_type`,`device_token`,`username`,`profile_pic`,`call_me`,`email_me`,`sale_call`,`sale_email`,login_type,login_id,npi,is_approve,read_access,location,latitude,longitude) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-        return await DAO.mysql_query("create_user", sql, [payload.email, payload.password ? md5(payload.password) : null, payload.name, rn(options), payload.device_type || null, payload.device_token || null, payload.username || null,
-        payload.image || null, payload.call_me || null, payload.email_me || null, payload.sale_call || null, payload.sale_email || null, payload.login_type || null, payload.login_id || null, payload.npi || null, 1, payload.read_access || "no", payload.location || null, payload.latitude || 0, payload.longitude || 0]);
+        let sql = 'INSERT INTO `tb_users`(`email`,`password`, `name`, `otp`,`device_type`,`device_token`,`profile_pic`,`birth_date`,`gender`,`zipcode`,`phone_number`,`country_code`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+        return await DAO.mysql_query("create_user", sql, [payload.email, payload.password ? md5(payload.password) : null, payload.name, rn(options), payload.device_type || null, payload.device_token || null,
+            payload.image || null,payload.birth_date || null, payload.gender || null, payload.zipcode || null,payload.phone_number,payload.country_code]);
 
     } catch (error) {
         throw error;
@@ -164,10 +165,10 @@ async function check_email(email) {
     }
 }
 
-async function check_username(username) {
+async function check_phone_number(phone_number) {
     try {
-        let sql = 'select * from tb_users where username = ?'
-        return await DAO.mysql_query("check username", sql, [username]);
+        let sql = 'select * from tb_users where phone_number = ?'
+        return await DAO.mysql_query("check phone_number", sql, [phone_number]);
     } catch (error) {
         throw error;
     }
@@ -292,7 +293,7 @@ async function email_send(data, replacements) {
     try {
         var htmlToSend = handlebars.compile(data.body)(replacements);
         let info = await transporter.sendMail({
-            from: '"Exactech" <mobiledev.cool@gmail.com>', // sender address
+            from: '"Circle" <mobiledev.cool@gmail.com>', // sender address
             to: data.email, // list of receivers
             subject: data.subject, // Subject line
             html: htmlToSend // html body
@@ -306,8 +307,8 @@ async function email_send(data, replacements) {
 
 async function check_user(payload) {
     try {
-        let sql = 'select * from tb_users where email = ? OR username = ? '
-        let data = await DAO.mysql_query("get_admin", sql, [payload.email, payload.email]);
+        let sql = 'select * from tb_users where email = ?'
+        let data = await DAO.mysql_query("check_user", sql, [payload.email]);
         if (data && data.length > 0) {
             if (data[0].password == md5(payload.password)) {
                 return data[0]
@@ -992,7 +993,7 @@ module.exports = {
     upload_image: upload_image,
     update_profile: update_profile,
     check_email: check_email,
-    check_username: check_username,
+    check_phone_number: check_phone_number,
     update_otp: update_otp,
     contact_sync: contact_sync,
     insert_contact_sync: insert_contact_sync,
