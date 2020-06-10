@@ -10,7 +10,7 @@ const rn = require('random-number');
 const underscore = require('underscore')
 const _ = require('lodash');
 let  redisClient = null
-if(process.env.NODE_ENV){
+if(process.env.NODE_ENV === "live"){
      redisClient = require('redis').createClient();
 }
 
