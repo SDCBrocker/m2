@@ -1,5 +1,6 @@
 const universal_functions = require('../utils/universal_functions');
 const customer_services = require('../services/customer_services')
+const admin_services = require('../services/admin_services')
 const constant = require('../lib/constant')
 const config = require('config');
 const accountSid = config.twilio.accountSid;
@@ -45,6 +46,33 @@ const sign_up = async (payload) => {
     }
 }
 
+const get_faq = async (userData) => {
+    try {
+        let sendObj = {}
+        let getCategory = await customer_services.get_all_category()
+        let getFaq= await customer_services.get_faq()
+        for(let i=0;i<getCategory.length;i++){
+            sendObj[getCategory[i].name] = _.filter(getFaq, function(p) {
+                return p.faq_category_id == getCategory[i].faq_category_id;
+              });
+        }
+        return universal_functions.sendSuccess({}, sendObj);
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
+
+const feedback_support = async (userData,payload) => {
+    try {
+
+        let getUser = await customer_services.feedback_support(userData,payload)
+        return universal_functions.sendSuccess({}, getUser);
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
 
 const register_other = async (payload) => {
     try {
@@ -745,6 +773,8 @@ module.exports = {
     login: login,
     check_email: check_email,
     check_phone_number: check_phone_number,
+    get_faq:get_faq,
+    feedback_support:feedback_support,
     get_details: get_details,
     otp_verify: otp_verify,
     upload_image: upload_image,

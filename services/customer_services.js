@@ -101,6 +101,42 @@ async function create_token_customer(userData) {
         throw error;
     }
 }
+async function get_all_category() {
+    try {
+
+        let sql = 'SELECT * from tb_faq_category WHERE status = 1';
+        let pushAr = []
+        sql += " ORDER BY faq_category_id   DESC  "
+        pushAr.push()
+        return await DAO.mysql_query("get_all_category", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function get_faq() {
+    try {
+
+        let sql = 'SELECT f.* from `tb_faq_answer` as f WHERE status = 1 ';
+        let pushAr = []
+        sql += " ORDER BY f.faq_answer_id  DESC "
+        return await DAO.mysql_query("get_faq", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+const feedback_support = async (userData,payload) => {
+    try {
+
+        let sql = 'INSERT INTO `tb_feedback_support`(`user_id`, `title`, `type`) VALUES (?,?,?)';
+        return await DAO.mysql_query("feedback_support", sql, [userData.user_id,payload.title,payload.type]);
+
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 async function upload_image(file) {
     try {
@@ -990,6 +1026,9 @@ module.exports = {
     otp_verify: otp_verify,
     get_user_phone: get_user_phone,
     create_token_customer: create_token_customer,
+    get_all_category:get_all_category,
+    get_faq:get_faq,
+    feedback_support:feedback_support,
     upload_image: upload_image,
     update_profile: update_profile,
     check_email: check_email,

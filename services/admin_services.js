@@ -46,6 +46,84 @@ async function create_token_admin(userData) {
     }
 }
 
+async function get_all_category(payload) {
+    try {
+
+        let sql = 'SELECT * from tb_faq_category WHERE 1 ';
+        let pushAr = []
+        sql += " ORDER BY faq_category_id   DESC  "
+        pushAr.push()
+        return await DAO.mysql_query("get_all_category", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function get_faq(payload) {
+    try {
+
+        let sql = 'SELECT f.*,c.name FROM `tb_faq_answer` as f left join ' +
+          ' tb_faq_category as c ON f.`faq_category_id`=c.faq_category_id WHERE 1 ';
+        let pushAr = []
+
+        if (payload.searchUser) {
+            sql += ` AND ( title LIKE "%${payload.searchUser}%"  OR answer LIKE "%${payload.searchUser}%" ) `
+        }
+
+        sql += " ORDER BY f.faq_answer_id  DESC  LIMIT ? OFFSET ? "
+        pushAr.push(payload.limit, payload.skip)
+        return await DAO.mysql_query("get_faq", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function feedback_support(payload) {
+    try {
+
+        let sql = 'SELECT f.*,u.name FROM `tb_feedback_support` as f ' +
+        ' LEFT JOIN tb_users as u ON f.user_id=u.user_id ' +
+       ' WHERE f.type= ? ORDER BY f.`feedback_support_id` DESC';
+        let pushAr = [payload.type]
+        return await DAO.mysql_query("feedback_support", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function checkNameCategory(payload) {
+    try {
+
+        let sql = 'SELECT * from  tb_faq_category as c WHERE c.name = ? ';
+      let pushAr = [payload.name]
+        return await DAO.mysql_query("checkNameCategory", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function add_faq_category(payload) {
+    try {
+
+        let sql = 'INSERT INTO `tb_faq_category`(`name`) VALUES (?)'
+        let pushAr = [payload.name]
+        return await DAO.mysql_query("add_faq_category", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function add_faq_question_answer(payload) {
+    try {
+
+        let sql = 'INSERT INTO `tb_faq_answer`(`faq_category_id`, `title`, `answer`)  VALUES (?,?,?)'
+        let pushAr = [payload.faq_category_id,payload.title,payload.answer]
+        return await DAO.mysql_query("add_faq_question_answer", sql, pushAr);
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function get_surgen(payload) {
     try {
 
@@ -155,29 +233,16 @@ async function all_surgeon_for_verify_count(payload) {
     }
 }
 
-async function get_surgen_count(payload) {
+async function get_faq_count(payload) {
     try {
 
-        let sql = 'select count(*) as count from tb_users where is_deleted = 0 '
+        let sql = 'select count(*) as count from tb_faq_answer where  1 '
         let pushAr = []
-        if (payload.isAdminApprove !== 'all') {
-            sql += " AND is_approve = ? "
-            if (payload.isAdminApprove == "true") {
-                pushAr.push(1)
-            } else {
-                pushAr.push(0)
-            }
-        }
-        if (payload.type !== 'all') {
-            sql += " AND login_type = ? "
-            pushAr.push(payload.type)
-
-        }
         if (payload.searchUser) {
-            sql += " AND ( name = ? OR email = ?  OR username = ?  ) "
-            pushAr.push(payload.searchUser, payload.searchUser, payload.searchUser)
+            sql += " AND ( title = ? OR answer = ?) "
+            pushAr.push(payload.searchUser, payload.searchUser)
         }
-        return await DAO.mysql_query("get_admin", sql, pushAr);
+        return await DAO.mysql_query("get_faq_count", sql, pushAr);
     } catch (error) {
         throw error;
     }
@@ -728,11 +793,17 @@ module.exports = {
     get_admin: get_admin,
     check_user: check_user,
     create_token_admin: create_token_admin,
+    get_faq:get_faq,
+    get_all_category:get_all_category,
+    checkNameCategory:checkNameCategory,
+    add_faq_category:add_faq_category,
+    add_faq_question_answer:add_faq_question_answer,
+    feedback_support:feedback_support,
     get_surgen: get_surgen,
     update_token: update_token,
     get_surgen_by_id: get_surgen_by_id,
     approve_reject: approve_reject,
-    get_surgen_count: get_surgen_count,
+    get_faq_count: get_faq_count,
     page_content: page_content,
     add_page_content: add_page_content,
     verify_unverify: verify_unverify,
