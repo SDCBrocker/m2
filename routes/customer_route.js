@@ -124,7 +124,60 @@ module.exports = [
                 }
             }
         }
-    // },
+    },
+    {
+        method: 'GET',
+        path: '/user/faq',
+        handler: async (request, reply) => {
+            let userData = request.auth.credentials
+            let data = await controller.customer_controller.get_faq(userData)
+            return data
+        },
+        config: {
+            auth: 'userAuth',
+            description: 'get faq details',
+            tags: ['api', 'user'],
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/user/feedback_support',
+        handler: async (request, reply) => {
+            let userData = request.auth.credentials
+            let payloadData = request.payload;
+            let data = await controller.customer_controller.feedback_support(userData,payloadData)
+            return data
+        },
+        config: {
+            auth: 'userAuth',
+            description: 'add feedback OR support',
+            tags: ['api', 'user'],
+            validate: {
+                payload: {
+                    title: joi.string().required().trim(),
+                    type: joi.number().required().valid([1,2]).description('1 for feedback and 2 for support'),
+                },
+                headers:universal_functions.authorizationHeaderObj,
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
     // {
     //     method: 'POST',
     //     path: '/user/check_other_login',
@@ -1074,5 +1127,5 @@ module.exports = [
     //             }
     //         }
     //     }
-    },
+   // },
 ];

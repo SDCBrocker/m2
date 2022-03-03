@@ -10,7 +10,7 @@ const rn = require('random-number');
 const underscore = require('underscore')
 const _ = require('lodash');
 let  redisClient = null
-if(process.env.NODE_ENV){
+if(process.env.NODE_ENV === "live"){
      redisClient = require('redis').createClient();
 }
 
@@ -42,18 +42,64 @@ const admin_login = async (payload) => {
     }
 }
 
-const get_surgen = async (userData, payload) => {
+const get_all_category = async (userData, payload) => {
     try {
-
-        let getUserCount = await admin_services.get_surgen_count(payload);
-        let getUser = await admin_services.get_surgen(payload);
-        return universal_functions.sendSuccess(payload, { users: getUser, count: getUserCount });
+        let getFaq = await admin_services.get_all_category(payload);
+        return universal_functions.sendSuccess(payload, { users: getFaq});
     } catch (error) {
         console.log(error);
         return universal_functions.sendError(error);
     }
 }
 
+const get_faq = async (userData, payload) => {
+    try {
+
+        let getFAQCount = await admin_services.get_faq_count(payload);
+        let getFaq = await admin_services.get_faq(payload);
+        return universal_functions.sendSuccess(payload, { users: getFaq, count: getFAQCount });
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
+
+const feedback_support = async (userData, payload) => {
+    try {
+        let getData = await admin_services.feedback_support(payload);
+        return universal_functions.sendSuccess(payload, { getData });
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
+
+
+const add_faq_category = async (userData, payload) => {
+    try {
+        let checkName = await admin_services.checkNameCategory(payload);
+        if(checkName && checkName.length > 0){
+            throw constant.msg.categoryAlreadyAdded
+        } else {
+            await admin_services.add_faq_category(payload);
+            return universal_functions.sendSuccess(payload, {  }); 
+        }
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
+
+const add_faq_question_answer = async (userData, payload) => {
+    try {
+            await admin_services.add_faq_question_answer(payload);
+            return universal_functions.sendSuccess(payload, {  }); 
+
+    } catch (error) {
+        console.log(error);
+        return universal_functions.sendError(error);
+    }
+}
 
 const get_all_block_surgeon = async (userData, payload) => {
     try {
@@ -599,7 +645,11 @@ const smsSend = (phone, otp) => {
 
 module.exports = {
     admin_login: admin_login,
-    get_surgen: get_surgen,
+    get_faq: get_faq,
+    get_all_category:get_all_category,
+    add_faq_category:add_faq_category,
+    add_faq_question_answer:add_faq_question_answer,
+    feedback_support:feedback_support,
     approve_reject: approve_reject,
     page_content: page_content,
     add_page_content: add_page_content,

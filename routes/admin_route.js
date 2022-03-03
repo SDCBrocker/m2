@@ -35,39 +35,155 @@ module.exports = [
             }
         }
     },
-    // {
-    //     method: 'GET',
-    //     path: '/admin/get_all_surgeon',
-    //     handler: async (request, reply) => {
-    //         let userData = request.auth.credentials
-    //         let query = request.query
-    //         let data = await controller.admin_controller.get_surgen(userData, query)
-    //         return data
-    //     },
-    //     config: {
-    //         auth: 'adminAuth',
-    //         description: 'Get surgeon List for approve and reject',
-    //         tags: ['api', 'admin'],
+    {
+        method: 'GET',
+        path: '/admin/get_all_category',
+        handler: async (request, reply) => {
+            let userData = request.auth.credentials
+            let query = request.query
+            let data = await controller.admin_controller.get_all_category(userData, query)
+            return data
+        },
+        config: {
+            auth: 'adminAuth',
+            description: 'Get all category',
+            tags: ['api', 'admin'],
 
-    //         validate: {
-    //             headers: universal_functions.authorizationHeaderObj,
-    //             query: {
-    //                 searchUser: joi.string(),
-    //                 isAdminApprove: joi.any().allow(['all', true, false]).required(),
-    //                 type: joi.any().allow(['all', constant.login_type.gps, constant.login_type.okta]).required(),
-    //                 limit: joi.number().integer().required(),
-    //                 skip: joi.number().integer().required()
-    //             },
-    //             failAction: universal_functions.failActionFunction
-    //         },
-    //         plugins: {
-    //             'hapi-swagger': {
-    //                 payloadType: 'form',
-    //                 responseMessages: constant.swagger_msg
-    //             }
-    //         }
-    //     }
-    // },
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                query: {
+                    searchUser: joi.string(),
+                },
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/admin/get_all_faq',
+        handler: async (request, reply) => {
+            let userData = request.auth.credentials
+            let query = request.query
+            let data = await controller.admin_controller.get_faq(userData, query)
+            return data
+        },
+        config: {
+            auth: 'adminAuth',
+            description: 'Get FAQ',
+            tags: ['api', 'admin'],
+
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                query: {
+                    searchUser: joi.string(),
+                    limit: joi.number().integer().required(),
+                    skip: joi.number().integer().required()
+                },
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/admin/faq_category',
+        handler: async (request, reply) => {
+            let payloadData = request.payload;
+            let userData = request.auth.credentials
+
+            let data = await controller.admin_controller.add_faq_category(userData, payloadData)
+            return data
+        },
+        config: {
+            auth: 'adminAuth',
+            description: 'Add faq category',
+            tags: ['api', 'admin'],
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                payload: {
+                    name: joi.string().required(),
+                },
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/admin/faq_question_answer',
+        handler: async (request, reply) => {
+            let payloadData = request.payload;
+            let userData = request.auth.credentials
+
+            let data = await controller.admin_controller.add_faq_question_answer(userData, payloadData)
+            return data
+        },
+        config: {
+            auth: 'adminAuth',
+            description: 'Add faq question and answer',
+            tags: ['api', 'admin'],
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                payload: {
+                    faq_category_id:joi.number().integer().required(),
+                    title: joi.string().required(),
+                    answer: joi.string().required(),
+                },
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/admin/feedback_support',
+        handler: async (request, reply) => {
+            let userData = request.auth.credentials
+            let query = request.query
+            let data = await controller.admin_controller.feedback_support(userData, query)
+            return data
+        },
+        config: {
+            auth: 'adminAuth',
+            description: 'Get feedback OR support',
+            tags: ['api', 'admin'],
+
+            validate: {
+                headers: universal_functions.authorizationHeaderObj,
+                query: {
+                    type: joi.number().required().valid([1,2]).description('1 for feedback and 2 for support')
+                },
+                failAction: universal_functions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                    responseMessages: constant.swagger_msg
+                }
+            }
+        }
+    },
     // {
     //     method: 'GET',
     //     path: '/admin/get_all_block_surgeon',
